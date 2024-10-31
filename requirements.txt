@@ -81,8 +81,6 @@ python-binance==1.0.22
 python-dateutil==2.9.0.post0
 python-decouple==3.8
 pytz==2024.1
-pywin32==306
-pywin32-ctypes==0.2.2
 pyzmq==26.0.3
 regex==2024.9.11
 requests==2.31.0
@@ -95,11 +93,6 @@ soupsieve==2.6
 sqlparse==0.5.1
 stack-data==0.6.3
 svgwrite==1.4.3
-tensorboard==2.16.2
-tensorboard-data-server==0.7.2
-tensorflow==2.16.1
-tensorflow-intel==2.16.1
-tensorflow-io-gcs-filesystem==0.31.0
 termcolor==2.4.0
 threadpoolctl==3.5.0
 tornado==6.4

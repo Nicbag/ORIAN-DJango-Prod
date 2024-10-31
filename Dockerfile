@@ -1,10 +1,10 @@
 # Usa una imagen oficial de Python como base
 FROM python:3.11.0
 # Establece el directorio de trabajo dentro del contenedor
-WORKDIR WORKDIR /orian_backend_django
+WORKDIR /WORKDIR/orian_backend_django
 
-# Copia el archivo de requisitos primero para aprovechar el caché de Docker
-COPY . .
+# Copy the current directory contents into the container at /WORKDIR/orian_backend_django
+COPY . /WORKDIR/orian_backend_django
 
 # Instala las dependencias del sistema necesarias
 RUN apt-get update && apt-get install -y \

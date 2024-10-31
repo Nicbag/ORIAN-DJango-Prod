@@ -1,7 +1,7 @@
 # Usa una imagen oficial de Python como base
 FROM python:3.11.0
 # Establece el directorio de trabajo dentro del contenedor
-WORKDIR /orian_backend_django
+WORKDIR /orian_backend_django/orian_backend_django
 
 # Copia el archivo de requisitos primero para aprovechar el caché de Docker
 COPY requirements.txt .

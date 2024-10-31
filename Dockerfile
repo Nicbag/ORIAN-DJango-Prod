@@ -4,7 +4,7 @@ FROM python:3.11.0
 WORKDIR WORKDIR /orian_backend_django
 
 # Copia el archivo de requisitos primero para aprovechar el caché de Docker
-COPY ..
+COPY . .
 
 # Instala las dependencias del sistema necesarias
 RUN apt-get update && apt-get install -y \

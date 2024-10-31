@@ -1,0 +1,1 @@
+web: gunicorn orian_backend_django.wsgi

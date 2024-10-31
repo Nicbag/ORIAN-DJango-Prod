@@ -23,3 +23,6 @@ class ParametroDTO:
         if not isinstance(value, str):
             raise ValueError("valor debe ser una cadena")
         self._valor = value
+
+    def __str__(self):
+        return (f"ParametroDTO(id={self._id}, nombre={self._nombre}, valor={self._valor})")

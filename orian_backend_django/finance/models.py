@@ -77,6 +77,11 @@ class Historico_Cartera_Usuario(models.Model):
     cartera_usuario = models.ForeignKey('Cartera_Usuario', on_delete=models.DO_NOTHING, db_column='cartera_usuario_id')
     simulacion = models.ForeignKey('Simulacion', on_delete=models.DO_NOTHING, db_column='simulacion_id')
 
+    class Meta:
+        db_table = 'historico_cartera_usuario'  # Nombre exacto de la tabla
+        managed = False        # Desactiva las migraciones para esta tabla
+        app_label = 'finance'
+
 class Activo_Cartera(models.Model):
     id = models.AutoField(primary_key=True)
     cantidad = models.FloatField()
@@ -99,7 +104,8 @@ class Transaccion(models.Model):
     fecha = models.DateTimeField()
 
     tipo_transaccion = models.ForeignKey('Tipo_Transaccion', on_delete=models.DO_NOTHING, db_column='tipo_transaccion_id')
-    activo_cartera = models.ForeignKey('Activo_Cartera', on_delete=models.DO_NOTHING, db_column='activo_cartera_id')
+    cartera_usuario = models.ForeignKey('Cartera_Usuario', on_delete=models.DO_NOTHING, db_column='cartera_usuario_id')
+    activo = models.ForeignKey('Activo', on_delete=models.DO_NOTHING, db_column='activo_id')
 
     class Meta:
         db_table = 'transaccion'  # Nombre exacto de la tabla

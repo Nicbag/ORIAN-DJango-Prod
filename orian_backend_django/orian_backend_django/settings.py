@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-3pj0m27!gi^usbgifma7^bmu_dn@1_h=6x_z@-$kd^rrn5mqo*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.railway.app', 'localhost']
 
 
 # Application definition
@@ -72,17 +72,19 @@ WSGI_APPLICATION = 'orian_backend_django.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+from decouple import config
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'OrianStg',
-        'USER': 'root',
-        'PASSWORD': 'my-secret-pw',
-        'HOST': '127.0.0.1',  # Nombre del contenedor de MariaDB
-        'PORT': '3306',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT'),
     }
 }
+
 
 
 

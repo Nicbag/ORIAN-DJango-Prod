@@ -5,9 +5,6 @@ import requests
 from binance.client import Client
 import json, datetime, os
 from finance.experts.information import getStockInformation
-from finance.experts.simulacionDTO.estrategiaDTO import EstrategiaDTO
-from finance.experts.simulacionDTO.parametroDTO import ParametroDTO
-from finance.experts.simulacionDTO.simulacionDTO import SimulacionDTO
 from django.views.decorators.csrf import csrf_exempt
 
 class StockNews(View):
@@ -169,22 +166,231 @@ class TranslateInformation(View):
         except requests.exceptions.RequestException as e:
             return JsonResponse({'error': 'Network error: ' + str(e)}, status=500)
 
+
+from finance.models import Transaccion, Activo, Tipo_Transaccion, Cartera_Usuario, Historico_Cartera_Usuario
+from finance.experts.simulacionDTO.simulacionDTO import SimulacionDTO, GranularidadDTO, CarteraDTO, ActivoDTO, EstrategiaAutomatizadaDTO, EstrategiaTransaccionDTO, TipoEstrategiaTransaccionDTO, ParametroDTO, ActivoCarteraDTO
+
 class SimulacionAutomatizada(View):
     def post(self, request, *args, **kwargs):
         try:
             # Lee el body de la solicitud y lo convierte a un diccionario de Python
-            data = json.loads(request.body)
+            body = json.loads(request.body.decode('utf-8'))
 
-            # Crea una instancia de EstrategiaDTO
-            estrategia_dto = EstrategiaDTO()
+            #! HERE!!!
+            simulacion_dto = SimulacionDTO()
+            simulacion_dto._id = body.get("id") 
+            simulacion_dto._nombre = body.get("nombre")
+            simulacion_dto._fechaDesde = body.get("fechaDesde")
+            simulacion_dto._fechaHasta = body.get("fechaHasta")
 
-            # Asigna los datos del cuerpo de la solicitud al DTO
-            estrategia_dto._id = data.get('id', None)
-            estrategia_dto.parametros = data.get('parametros', [])  # Esta es la lista de ParametroDTO
+            simulacion_dto._granularidad = GranularidadDTO()  # Crear instancia de GranularidadDTO
+            simulacion_dto._granularidad._id = body.get("granularidadTiempo", {}).get("id")
+            simulacion_dto._granularidad._nombre = body.get("granularidadTiempo", {}).get("nombre")
 
-            print(data)
+            simulacion_dto._carteraUsuario = CarteraDTO()  # Crear instancia de CarteraDTO
+            simulacion_dto._carteraUsuario._id = body.get("carteraUsuario", {}).get("id")
+            simulacion_dto._carteraUsuario._nombre = body.get("carteraUsuario", {}).get("nombre")
 
-            return JsonResponse({"message": "Simulación procesada exitosamente"})
+            listaActivoCartera = body.get("carteraUsuario", {}).get("listaActivoCartera", {})
+            listaActivoCarteraDTO = []
+            for activoCartera in listaActivoCartera:
+                activoCarteraDTO = ActivoCarteraDTO()
+                activoCarteraDTO._id = activoCartera.get("id")
+                activoCarteraDTO._ticker = activoCartera.get("ticker")
+                listaActivoCarteraDTO.append(activoCarteraDTO)
+            simulacion_dto._carteraUsuario._listaActivoCartera = listaActivoCarteraDTO
+            
+            simulacion_dto._monedaBase = ActivoDTO()  # Crear instancia de ActivoDTO
+            simulacion_dto._monedaBase._id = body.get("monedaBase", {}).get("id")
+            simulacion_dto._monedaBase._nombre = body.get("monedaBase", {}).get("nombre")
+
+            estrategiasAutomatizadas = body.get("estrategiasAutomatizadas", {})
+            estrategiasAutomatizadasDTO = []
+            for estrategiaAutomatizada in estrategiasAutomatizadas:
+                estrategiaAutomatizadaDTO = EstrategiaAutomatizadaDTO()
+                estrategiaAutomatizadaDTO._id = estrategiaAutomatizada.get("id")
+                estrategiaAutomatizadaDTO._nombre = estrategiaAutomatizada.get("nombre")
+                estrategiaAutomatizadaDTO._prioridad = estrategiaAutomatizada.get("prioridad")
+                activo = estrategiaAutomatizada.get("activo", {})
+                activoDTO = ActivoDTO()
+                activoDTO._id = activo.get("id")
+                activoDTO._ticker = activo.get("ticker")
+                estrategiaAutomatizadaDTO._activo = activoDTO
+
+                disparadorTransaccionCompra = estrategiaAutomatizada.get("disparadorTransaccionCompra", {})
+                disparadorTransaccionCompraDTO = EstrategiaTransaccionDTO()
+                disparadorTransaccionCompraDTO._id = disparadorTransaccionCompra.get("id")
+                disparadorTransaccionCompraDTO._nombre = disparadorTransaccionCompra.get("nombre")
+                tipo_estrategia_transaccion = disparadorTransaccionCompra.get("tipoEstrategiaTransaccion", {})
+                tipo_estrategia_transaccionDTO = TipoEstrategiaTransaccionDTO()
+                tipo_estrategia_transaccionDTO._id = tipo_estrategia_transaccion.get("id")
+                tipo_estrategia_transaccionDTO._nombre = tipo_estrategia_transaccion.get("nombre")
+                disparadorTransaccionCompraDTO._tipoEstrategiaTransaccion = tipo_estrategia_transaccionDTO
+                parametro = disparadorTransaccionCompra.get("parametros", {})
+                parametrosDTO = []
+                for parametro in parametro:
+                    parametroDTO = ParametroDTO()
+                    parametroDTO._id = parametro.get("id")
+                    parametroDTO._nombre = parametro.get("nombre")
+                    parametroDTO._valor = parametro.get("valor")
+                    parametrosDTO.append(parametroDTO)
+                disparadorTransaccionCompraDTO._parametros = parametrosDTO
+                estrategiaAutomatizadaDTO._disparadorTransaccionCompra = disparadorTransaccionCompraDTO
+
+                adminCantidadTransaccionVenta = estrategiaAutomatizada.get("adminCantidadTransaccionVenta", {})
+                adminCantidadTransaccionVentaDTO = EstrategiaTransaccionDTO()
+                adminCantidadTransaccionVentaDTO._id = adminCantidadTransaccionVenta.get("id")
+                adminCantidadTransaccionVentaDTO._nombre = adminCantidadTransaccionVenta.get("nombre")
+                tipo_estrategia_transaccion = adminCantidadTransaccionVenta.get("tipoEstrategiaTransaccion", {})
+                tipo_estrategia_transaccionDTO = TipoEstrategiaTransaccionDTO()
+                tipo_estrategia_transaccionDTO._id = tipo_estrategia_transaccion.get("id")
+                tipo_estrategia_transaccionDTO._nombre = tipo_estrategia_transaccion.get("nombre")
+                disparadorTransaccionCompraDTO._tipoEstrategiaTransaccion = tipo_estrategia_transaccionDTO
+                parametro = adminCantidadTransaccionVenta.get("parametros", {})
+                parametrosDTO = []
+                for parametro in parametro:
+                    parametroDTO = ParametroDTO()
+                    parametroDTO._id = parametro.get("id")
+                    parametroDTO._nombre = parametro.get("nombre")
+                    parametroDTO._valor = parametro.get("valor")
+                    parametrosDTO.append(parametroDTO)
+                adminCantidadTransaccionVentaDTO._parametros = parametrosDTO
+                estrategiaAutomatizadaDTO.adminCantidadTransaccionVenta = adminCantidadTransaccionVentaDTO
+
+                adminCantidadTransaccionCompra = estrategiaAutomatizada.get("adminCantidadTransaccionCompra", {})
+                adminCantidadTransaccionCompraDTO = EstrategiaTransaccionDTO()
+                adminCantidadTransaccionCompraDTO._id = adminCantidadTransaccionCompra.get("id")
+                adminCantidadTransaccionCompraDTO._nombre = adminCantidadTransaccionCompra.get("nombre")
+                tipo_estrategia_transaccion = adminCantidadTransaccionCompra.get("tipoEstrategiaTransaccion", {})
+                tipo_estrategia_transaccionDTO = TipoEstrategiaTransaccionDTO()
+                tipo_estrategia_transaccionDTO._id = tipo_estrategia_transaccion.get("id")
+                tipo_estrategia_transaccionDTO._nombre = tipo_estrategia_transaccion.get("nombre")
+                disparadorTransaccionCompraDTO._tipoEstrategiaTransaccion = tipo_estrategia_transaccionDTO
+                parametro = adminCantidadTransaccionCompra.get("parametros", {})
+                parametrosDTO = []
+                for parametro in parametro:
+                    parametroDTO = ParametroDTO()
+                    parametroDTO._id = parametro.get("id")
+                    parametroDTO._nombre = parametro.get("nombre")
+                    parametroDTO._valor = parametro.get("valor")
+                    parametrosDTO.append(parametroDTO)
+                adminCantidadTransaccionCompraDTO._parametros = parametrosDTO
+                estrategiaAutomatizadaDTO._adminCantidadTransaccionCompra = adminCantidadTransaccionCompraDTO
+
+                disparadorTransaccionVenta = estrategiaAutomatizada.get("disparadorTransaccionVenta", {})
+                disparadorTransaccionVentaDTO = EstrategiaTransaccionDTO()
+                disparadorTransaccionVentaDTO._id = disparadorTransaccionVenta.get("id")
+                disparadorTransaccionVentaDTO._nombre = disparadorTransaccionVenta.get("nombre")
+                tipo_estrategia_transaccion = disparadorTransaccionVenta.get("tipoEstrategiaTransaccion", {})
+                tipo_estrategia_transaccionDTO = TipoEstrategiaTransaccionDTO()
+                tipo_estrategia_transaccionDTO._id = tipo_estrategia_transaccion.get("id")
+                tipo_estrategia_transaccionDTO._nombre = tipo_estrategia_transaccion.get("nombre")
+                disparadorTransaccionCompraDTO._tipoEstrategiaTransaccion = tipo_estrategia_transaccionDTO
+                parametro = disparadorTransaccionVenta.get("parametros", {})
+                parametrosDTO = []
+                for parametro in parametro:
+                    parametroDTO = ParametroDTO()
+                    parametroDTO._id = parametro.get("id")
+                    parametroDTO._nombre = parametro.get("nombre")
+                    parametroDTO._valor = parametro.get("valor")
+                    parametrosDTO.append(parametroDTO)
+                disparadorTransaccionVentaDTO._parametros = parametrosDTO
+                estrategiaAutomatizadaDTO._disparadorTransaccionVenta = disparadorTransaccionVentaDTO
+
+                algoritmoTrading = estrategiaAutomatizada.get("algoritmoTrading", {})
+                algoritmoTradingDTO = EstrategiaTransaccionDTO()
+                algoritmoTradingDTO._id = algoritmoTrading.get("id")
+                algoritmoTradingDTO._nombre = algoritmoTrading.get("nombre")
+                tipo_estrategia_transaccion = algoritmoTrading.get("tipoEstrategiaTransaccion", {})
+                tipo_estrategia_transaccionDTO = TipoEstrategiaTransaccionDTO()
+                tipo_estrategia_transaccionDTO._id = tipo_estrategia_transaccion.get("id")
+                tipo_estrategia_transaccionDTO._nombre = tipo_estrategia_transaccion.get("nombre")
+                disparadorTransaccionCompraDTO._tipoEstrategiaTransaccion = tipo_estrategia_transaccionDTO
+                parametro = algoritmoTrading.get("parametros", {})
+                parametrosDTO = []
+                for parametro in parametro:
+                    parametroDTO = ParametroDTO()
+                    parametroDTO._id = parametro.get("id")
+                    parametroDTO._nombre = parametro.get("nombre")
+                    parametroDTO._valor = parametro.get("valor")
+                    parametrosDTO.append(parametroDTO)
+                algoritmoTradingDTO._parametros = parametrosDTO
+                estrategiaAutomatizadaDTO._algoritmoTrading = algoritmoTradingDTO
+
+                estrategiasAutomatizadasDTO.append(estrategiaAutomatizadaDTO)
+
+            simulacion_dto._estrategiasAutomatizadas = estrategiasAutomatizadasDTO
+
+            #! Here -> SimulacionDTO
+
+            #! Transacciones
+            cartera_usuario_id = body.get("carteraUsuario", {}).get("id")
+            transacciones = list(Transaccion.objects.filter(cartera_usuario=cartera_usuario_id).values())
+            transaccionesDTO = []
+            for transaccion in transacciones:
+                activo_id = transaccion['activo_id']
+                activo = Activo.objects.get(id=activo_id)
+
+                tipo_transaccion_id = transaccion['tipo_transaccion_id']
+                tipo_transaccion = Tipo_Transaccion.objects.get(id=tipo_transaccion_id)
+
+                cartera_usuario_id = transaccion['cartera_usuario_id']
+                cartera_usuario = Cartera_Usuario.objects.get(id=cartera_usuario_id)
+                
+                activo_dto = {
+                    "id": activo.id,
+                    "nombre": activo.nombre
+                }
+                tipo_transaccion_dto = {
+                    "id": tipo_transaccion.id,
+                    "nombre": tipo_transaccion.nombre
+                }
+                cartera_usuario_dto = {
+                    "id": cartera_usuario.id,
+                    "nombre": cartera_usuario.nombre
+                }
+                
+                transaccionDTO = {
+                    "id": transaccion['id'],
+                    "cantidad": transaccion['cantidad'],
+                    "precio": transaccion['precio'],
+                    "fecha": transaccion['fecha'],
+                    "tipoTransaccion": tipo_transaccion_dto,
+                    "carteraUsuario": cartera_usuario_dto,
+                    "activo": activo_dto
+                }
+                transaccionesDTO.append(transaccionDTO)
+
+            #! Hisotorico Cartera Usuario
+            cartera_usuario = Cartera_Usuario.objects.get(id=cartera_usuario_id)
+            historicoCarteraUsuarios = list(Historico_Cartera_Usuario.objects.filter(cartera_usuario_id=cartera_usuario_id).values())
+
+            historicoCarteraUsuariosDTO = []
+            for historicoCarteraUsuario in historicoCarteraUsuarios:
+                cartera_usuario_id = historicoCarteraUsuario['cartera_usuario_id']
+                cartera_usuario = Cartera_Usuario.objects.get(id=cartera_usuario_id)
+
+                cartera_usuario_dto = {
+                    "id": cartera_usuario.id,
+                    "nombre": cartera_usuario.nombre
+                }
+                
+                historicoCarteraUsuarioDTO = {
+                    "id": historicoCarteraUsuario['id'],
+                    "valorTotal": historicoCarteraUsuario['valor_total'],
+                    "carteraUsuario": cartera_usuario_dto
+                }
+
+                historicoCarteraUsuariosDTO.append(historicoCarteraUsuarioDTO)
+
+            rpta = JsonResponse({
+                "transacciones": transaccionesDTO,
+                "historicoCarteraUsuarios": historicoCarteraUsuariosDTO
+            })
+
+            # Retorna la respuesta
+            return rpta
 
         except (ValueError, Exception) as e:
             return JsonResponse({'error': str(e)}, status=400)
+

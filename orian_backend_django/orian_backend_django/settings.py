@@ -25,8 +25,7 @@ SECRET_KEY = 'django-insecure-3pj0m27!gi^usbgifma7^bmu_dn@1_h=6x_z@-$kd^rrn5mqo*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://orian-backjava-prod-production.up.railway.app/', 'https://orian-front.vercel.app/']
 
 # Application definition
 

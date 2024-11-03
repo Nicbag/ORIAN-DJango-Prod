@@ -1,5 +1,5 @@
-from orian_simulation.simulation import WalletUpdate
-from orian_simulation.transaction import TransactionEnum
+from finance.orian_simulation.simulation import WalletUpdate
+from finance.orian_simulation.transaction import TransactionEnum
 
 
 class Report:

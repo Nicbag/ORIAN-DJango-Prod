@@ -40,8 +40,8 @@ class EstrategiaTransaccionDTO:
     
     @id.setter
     def id(self, value):
-        if not isinstance(value, str):
-            raise ValueError("id debe ser una cadena")
+        if not isinstance(value, int):
+            raise ValueError("id debe ser una int")
         self._id = value
 
     @property

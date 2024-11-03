@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 import pandas as pd
 
-from orian_simulation.trading.prediction import PredictionEnum
+from finance.orian_simulation.trading.prediction import PredictionEnum
 
 
 class TradingAlgorithm(ABC):

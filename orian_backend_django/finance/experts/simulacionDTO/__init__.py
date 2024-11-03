@@ -4,3 +4,4 @@ from .estrategiaTransaccionDTO import EstrategiaTransaccionDTO
 from .parametroDTO import ParametroDTO
 from .simulacionDTO import SimulacionDTO
 from .tipoEstrategiaTransaccion import TipoEstrategiaTransaccionDTO
+from .activoCarteraDTO import ActivoCarteraDTO

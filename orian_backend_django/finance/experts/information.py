@@ -42,6 +42,8 @@ def getYahooInfo(ticker):
     try:
         stock_data = yf.Ticker(ticker)
         info = stock_data.info
+        print(info)
+        
         return info
 
     except (ValueError, yf.YFNetworkError, yf.YFResponseError) as e:

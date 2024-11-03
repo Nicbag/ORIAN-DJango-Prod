@@ -5,6 +5,16 @@ class ParametroDTO:
         self._valor = None
 
     @property
+    def id(self):
+        return self._id
+    
+    @id.setter
+    def id(self, value):
+        if not isinstance(value, int):
+            raise ValueError("id debe ser una entero")
+        self._id = value
+
+    @property
     def nombre(self):
         return self._nombre
     
@@ -20,9 +30,13 @@ class ParametroDTO:
     
     @valor.setter
     def valor(self, value):
-        if not isinstance(value, str):
-            raise ValueError("valor debe ser una cadena")
-        self._valor = value
+        print(type(value))
+        print(value)
+        
+        try:
+            self._valor = float(value)
+        except Exception:
+            raise ValueError("valor debe ser un numero")
 
     def __str__(self):
         return (f"ParametroDTO(id={self._id}, nombre={self._nombre}, valor={self._valor})")

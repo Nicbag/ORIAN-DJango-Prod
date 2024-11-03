@@ -4,9 +4,9 @@ from typing import Union
 
 import pandas as pd
 
-from orian_simulation.transaction import Wallet, TransactionDTO
-from orian_simulation.strategy import AutomatedStrategy
-from orian_simulation.market import StockMarketHandler, Asset, Currency
+from finance.orian_simulation.transaction import Wallet, TransactionDTO
+from finance.orian_simulation.strategy import AutomatedStrategy
+from finance.orian_simulation.market import StockMarketHandler, Asset, Currency
 
 
 @dataclass

@@ -4,6 +4,16 @@ class TipoEstrategiaTransaccionDTO:
         self._nombre = None
 
     @property
+    def id(self):
+        return self._id
+    
+    @id.setter
+    def id(self, value):
+        if not isinstance(value, int):
+            raise ValueError("id debe ser una int")
+        self._id = value
+
+    @property
     def nombre(self):
         return self._nombre
     

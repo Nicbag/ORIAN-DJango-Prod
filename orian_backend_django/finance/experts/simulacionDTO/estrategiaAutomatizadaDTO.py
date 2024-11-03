@@ -6,8 +6,8 @@ class EstrategiaAutomatizadaDTO:
         self._id = None
         self._nombre = None
         self._activo = None
-        self._admninCantidadTransaccionCompra = None
-        self._admninCantidadTransaccionVenta = None
+        self._adminCantidadTransaccionCompra = None
+        self._adminCantidadTransaccionVenta = None
         self._disparadorTransaccionCompra = None
         self._disparadorTransaccionVenta = None
         self._algoritmoTrading = None
@@ -44,24 +44,24 @@ class EstrategiaAutomatizadaDTO:
         self._disparadorTransaccionCompra = value
 
     @property
-    def admninCantidadTransaccionVenta(self):
-        return self._admninCantidadTransaccionVenta
+    def adminCantidadTransaccionVenta(self):
+        return self._adminCantidadTransaccionVenta
     
-    @admninCantidadTransaccionVenta.setter
-    def admninCantidadTransaccionVenta(self, value):
+    @adminCantidadTransaccionVenta.setter
+    def adminCantidadTransaccionVenta(self, value):
         if not isinstance(value, EstrategiaTransaccionDTO):
-            raise ValueError("admninCantidadTransaccionVenta debe ser un EstrategiaTransaccionDTO")
-        self._admninCantidadTransaccionVenta = value
+            raise ValueError("adminCantidadTransaccionVenta debe ser un EstrategiaTransaccionDTO")
+        self._adminCantidadTransaccionVenta = value
 
     @property
-    def admninCantidadTransaccionCompra(self):
-        return self._admninCantidadTransaccionCompra
+    def adminCantidadTransaccionCompra(self):
+        return self._adminCantidadTransaccionCompra
     
-    @admninCantidadTransaccionCompra.setter
-    def admninCantidadTransaccionCompra(self, value):
+    @adminCantidadTransaccionCompra.setter
+    def adminCantidadTransaccionCompra(self, value):
         if not isinstance(value, EstrategiaTransaccionDTO):
-            raise ValueError("admninCantidadTransaccionCompra debe ser un EstrategiaTransaccionDTO")
-        self._admninCantidadTransaccionCompra = value
+            raise ValueError("adminCantidadTransaccionCompra debe ser un EstrategiaTransaccionDTO")
+        self._adminCantidadTransaccionCompra = value
 
     @property
     def nombre(self):
@@ -79,8 +79,8 @@ class EstrategiaAutomatizadaDTO:
     
     @id.setter
     def id(self, value):
-        if not isinstance(value, str):
-            raise ValueError("id debe ser una cadena")
+        if not isinstance(value, int):
+            raise ValueError("id debe ser una int")
         self._id = value
 
     @property
@@ -101,15 +101,15 @@ class EstrategiaAutomatizadaDTO:
     
     @prioridad.setter
     def prioridad(self, value):
-        if not isinstance(value, str):
-            raise ValueError("prioridad debe ser una cadena")
+        if not isinstance(value, int):
+            raise ValueError("prioridad debe ser una int")
         self._prioridad = value
 
     def __str__(self):
         return (f"EstrategiaAutomatizadaDTO(id={self._id}, nombre={self._nombre}, "
                 f"activo={self._activo}, "
-                f"admninCantidadTransaccionCompra={self._admninCantidadTransaccionCompra}, "
-                f"admninCantidadTransaccionVenta={self._admninCantidadTransaccionVenta}, "
+                f"adminCantidadTransaccionCompra={self._adminCantidadTransaccionCompra}, "
+                f"adminCantidadTransaccionVenta={self._adminCantidadTransaccionVenta}, "
                 f"disparadorTransaccionCompra={self._disparadorTransaccionCompra}, "
                 f"disparadorTransaccionVenta={self._disparadorTransaccionVenta}, "
                 f"algoritmoTrading={self._algoritmoTrading}, "

@@ -1,9 +1,9 @@
 from pandas import DataFrame
 
-from orian_simulation.market import Asset
-from orian_simulation.trading.algorithm import TradingAlgorithm
-from orian_simulation.trading.prediction import PredictionEnum
-from orian_simulation.transaction import (
+from finance.orian_simulation.market import Asset
+from finance.orian_simulation.trading.algorithm import TradingAlgorithm
+from finance.orian_simulation.trading.prediction import PredictionEnum
+from finance.orian_simulation.transaction import (
     TransactionQuantityManager,
     TransactionTrigger,
     TransactionDTO,

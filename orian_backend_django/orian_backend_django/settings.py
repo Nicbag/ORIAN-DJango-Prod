@@ -34,10 +34,6 @@ ALLOWED_HOSTS = [
     'orian-front.vercel.app'
 ]
 
-# Cambios
-
-# Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -48,6 +44,12 @@ INSTALLED_APPS = [
     'finance',  # Agrega la aplicación de finanzas
     'corsheaders'
 ]
+
+
+# Cambios
+
+# Application definition
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

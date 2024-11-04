@@ -7,20 +7,15 @@ import requests
 import json, datetime, os
 from finance.experts.information import getStockInformation
 from django.views.decorators.csrf import csrf_exempt
+from decouple import config
 
+# Cargar la clave de la API desde la variable de entorno
+api_key_poligon = config('API_KEY_POLYGON')
+api_key_alpha = config('API_KEY_ALPHA')
 
 class StockNews(View):
     def get(self, request, ticker, *args, **kwargs):
-
-        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        secret_file_path = os.path.join(base_dir, "finance", "secret.json")
-
         try:
-            with open(secret_file_path, "r") as file:
-                secrets = json.load(file)
-
-            api_key_poligon = secrets.get("api_key_poligon")
-
             url = f"https://api.polygon.io/v2/reference/news?ticker={ticker.upper().split('-')[0]}&limit=10&apiKey={api_key_poligon}"
 
             response = requests.get(url)
@@ -41,17 +36,12 @@ class StockNews(View):
 
 class StockInformation(View):
     def get(self, request, ticker, *args, **kwargs):
-        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        secret_file_path = os.path.join(base_dir, "finance", "secret.json")
-
-        with open(secret_file_path, "r") as file:
-            secrets = json.load(file)
 
         try:
             infoDTO = getStockInformation(
                 ticker.upper(),
-                secrets.get("api_key_alpha"),
-                secrets.get("api_key_poligon"),
+                api_key_alpha,
+                api_key_poligon,
             )
             print(infoDTO.to_dict())
             return JsonResponse(infoDTO.to_dict())
@@ -115,14 +105,12 @@ class CryptocurrencyInformation(View):
         return JsonResponse(data)
 
 
+api_secret = config('API_SECRET')
+api_key = config('API_KEY')
+from binance.client import Client
+
 class CryptocurrencyHistory(View):
     def get(self, request, crypto, *args, **kwargs):
-        with open(
-            "/home/ciro/Documentos/Back/orian-backend-django/secret.json", "r"
-        ) as file:
-            secrets = json.load(file)
-        api_key = secrets.get("api_key")
-        api_secret = secrets.get("api_secret")
 
         try:
             # Configura tu cliente Binance (necesitas tu API key y secret aquí)

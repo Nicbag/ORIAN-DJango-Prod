@@ -93,7 +93,7 @@ def getStockInformation(ticker, api_key_alpha, api_key_poligon):
     except ValueError as e:
         raise e  
 
-    try:
+    '''try:
         infoAlpha = getAlphaInfo(ticker.upper().split('-')[0], api_key_alpha)
         
         if infoAlpha.get('MarketCapitalization') is not None:
@@ -137,6 +137,6 @@ def getStockInformation(ticker, api_key_alpha, api_key_poligon):
 
     except ValueError as e:
         raise e
-
+    '''
     print(infoDTO.to_dict())
     return infoDTO

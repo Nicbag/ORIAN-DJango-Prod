@@ -30,7 +30,8 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '191.82.30.182',
     'orian-backjava-prod-production.up.railway.app',
-    'orian-front.vercel.app'
+    'orian-front.vercel.app',
+    'orian-django-prod-production.up.railway.app', 
 ]
 
 INSTALLED_APPS = [

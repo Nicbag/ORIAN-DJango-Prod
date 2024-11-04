@@ -26,5 +26,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Expone el puerto 8000 para que Railway pueda acceder
 EXPOSE 8000
 
+
 # Comando para iniciar el servidor (asegúrate de que apunte a la ubicación correcta)
 CMD ["python", "orian_backend_django/manage.py", "runserver", "0.0.0.0:8000"]

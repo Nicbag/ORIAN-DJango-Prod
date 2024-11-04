@@ -17,6 +17,9 @@ RUN apt-get update && apt-get install -y \
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"  
 
+# Actualiza pip a la última versión
+RUN pip install --upgrade pip
+
 # Instala las dependencias de Python listadas en requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 

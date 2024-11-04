@@ -25,7 +25,14 @@ SECRET_KEY = 'django-insecure-3pj0m27!gi^usbgifma7^bmu_dn@1_h=6x_z@-$kd^rrn5mqo*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'orian-backjava-prod-production.up.railway.app', 'orian-front.vercel.app']
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '191.82.30.182',
+    'orian-backjava-prod-production.up.railway.app',
+    'orian-front.vercel.app'
+]
+
 
 # Application definition
 
@@ -120,6 +127,7 @@ USE_TZ = True
 
 CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:8000',
+    'http://191.82.30.182',
     'https://orian-backjava-prod-production.up.railway.app',
     'https://orian-front.vercel.app'
 ]

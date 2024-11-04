@@ -30,7 +30,6 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '191.82.30.182',
     'orian-backjava-prod-production.up.railway.app',
-    'orian-django-prod-production.up.railway.app',
     'orian-front.vercel.app'
 ]
 
@@ -137,10 +136,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:8000',
     'http://191.82.30.182',
     'https://orian-backjava-prod-production.up.railway.app',
-    'https://orian-front.vercel.app',
-    'orian-backjava-prod-production.up.railway.app',
-    'orian-front.vercel.app',
-    'https://orian-django-prod-production.up.railway.app'
+    'https://orian-front.vercel.app'
 ]
 
 LOGGING = {

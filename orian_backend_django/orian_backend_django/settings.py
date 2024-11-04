@@ -118,7 +118,12 @@ USE_I18N = True
 
 USE_TZ = True
 
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000']
+CSRF_TRUSTED_ORIGINS = [
+    'http://127.0.0.1:8000',
+    'https://orian-backjava-prod-production.up.railway.app',
+    'https://orian-front.vercel.app'
+]
+
 
 
 CSRF_COOKIE_SECURE = False

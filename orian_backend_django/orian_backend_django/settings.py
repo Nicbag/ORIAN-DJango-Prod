@@ -141,7 +141,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://orian-backjava-prod-production.up.railway.app',
     'https://orian-front.vercel.app',
     'https://orian-backjava-prod.railway.internal',
-    '192.168.100.12'
+    'http://192.168.100.12'
 ]
 
 LOGGING = {
